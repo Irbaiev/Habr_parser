@@ -16,10 +16,9 @@ from core.settings import EMAIL_HOST_USER
 from scraping.models import Follower
 from habr import habr_parsing
 
-now = datetime.now()
 posts = habr_parsing()
 emails = Follower.objects.all()
-subject = 'Посты на сегодня {now.strftime("%m/%d/%Y, %H:%M:%S")}'
+subject = 'Посты на сегодня {datetime.now()}'
 from_email = EMAIL_HOST_USER
 text_content = 'Посты на сегодня'
 html_content = ''
