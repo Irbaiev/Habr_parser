@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup as BS
 
 
 
-url = 'https://habr.com/ru/all/page1/'
 
 headers = [
     {'User-Agent': 'Mozilla/5.0 (Windows NT 5.1; rv:47.0) Gecko/20100101 Firefox/47.0',
@@ -19,25 +18,27 @@ headers = [
 
 
 
+def habr_parsing():
 
-res = requests.get(url, headers=choice(headers))
-posts =[]
+    url = 'https://habr.com/ru/all/page1/'
+    res = requests.get(url, headers=choice(headers))
+    posts =[]
 
-if res.status_code == 200:
-        soup = BS(res.content, 'html.parser')
-        article = soup.find('article', class_ = 'tm-articles-list__item').find_all_next('div', class_ = 'tm-article-snippet')
-        for i in article:
-            user = i.find('a', class_ = 'tm-user-info__username').text.strip()
-            profile = 'https://habr.com' + i.a['href']
-            url = 'https://habr.com' + i.find('h2', class_ = 'tm-article-snippet__title tm-article-snippet__title_h2').a['href']
-            title = i.find('h2', class_ = 'tm-article-snippet__title tm-article-snippet__title_h2').text.strip()
-            posts.append((user, profile, url, title))
+    if res.status_code == 200:
+            soup = BS(res.content, 'html.parser')
+            article = soup.find('article', class_ = 'tm-articles-list__item').find_all_next('div', class_ = 'tm-article-snippet')
+            for i in article:
+                user = i.find('a', class_ = 'tm-user-info__username').text.strip()
+                profile = 'https://habr.com' + i.a['href']
+                url = 'https://habr.com' + i.find('h2', class_ = 'tm-article-snippet__title tm-article-snippet__title_h2').a['href']
+                title = i.find('h2', class_ = 'tm-article-snippet__title tm-article-snippet__title_h2').text.strip()
+                posts.append((user, profile, url, title))
+    return posts
+    # conn = sqlite3.connect('posts.db')
 
-conn = sqlite3.connect('posts.db')
+    # cursor = conn.cursor()
 
-cursor = conn.cursor()
+    # cursor.executemany("INSERT INTO posts VALUES (?,?,?,?)", posts)
 
-cursor.executemany("INSERT INTO posts VALUES (?,?,?,?)", posts)
-
-conn.commit()
+    # conn.commit()
 
