@@ -7,7 +7,7 @@ from .utils import habr_parser
 
 class Index(View):
     def get(self, request):
-        posts = habr_parser('https://habr.com/ru/all/')
+        posts = habr_parser('https://habr.com/ru/all/page')
         return render(request, 'index.html', {'posts':posts})
 
     def post(self, request):

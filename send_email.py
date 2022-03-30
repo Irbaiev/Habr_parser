@@ -18,7 +18,7 @@ from habr import habr_parsing
 
 posts = habr_parsing()
 emails = Follower.objects.all()
-subject = 'Посты на сегодня {datetime.today()}'
+subject = 'Посты на сегодня'
 from_email = EMAIL_HOST_USER
 text_content = 'Посты на сегодня'
 html_content = ''

@@ -19,17 +19,17 @@ headers = [
 
 posts =[]
 
+link = 'https://habr.com/ru/all/'
 
-def habr_parser(url):
-    res = requests.get(url, headers=choice(headers))
-    pagination = len(BS(res.content, 'html.parser').find(
-        'div', class_='tm-pagination').find_all('a'))
-    for u in range(pagination):
-        url = f'https://habr.com/ru/all/{u}/'
+
+def habr_parser(link):
+    for u in range(5):
+        res = requests.get(f'{link}/{u}', headers=choice(headers))
         if res.status_code == 200:
                 soup = BS(res.content, 'html.parser')
-                article = soup.find('article', class_ = 'tm-articles-list__item').find_all_next('div', class_ = 'tm-article-snippet')
-                for i in article:
+                article = soup.find('article', class_ = 'tm-articles-list__item')
+                div = article.find_all('div', class_ = 'tm-article-snippet')
+                for i in div:
                     user = i.find('a', class_ = 'tm-user-info__username').text.strip()
                     profile = 'https://habr.com' + i.a['href']
                     urls = 'https://habr.com' + i.find('h2', class_ = 'tm-article-snippet__title tm-article-snippet__title_h2').a['href']
@@ -37,7 +37,8 @@ def habr_parser(url):
                     # desc = i.find('div', class_ = 'article-formatted-body article-formatted-body_version-2').find_next('p')
                     posts.append({'user':user, 'profile':profile, 'urls':urls, 'title': title})
                     # , 'desc':desc})
-        return posts
+                    u =+ 1
+    return posts
 
     conn = sqlite3.connect('posts.db')
 
