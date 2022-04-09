@@ -21,13 +21,14 @@ posts =[]
 
 link = 'https://habr.com/ru/all/'
 
+u = 1
 
 def habr_parser(link):
     for u in range(5):
-        res = requests.get(f'{link}/{u}', headers=choice(headers))
+        res = requests.get(f'{link}page{u}', headers=choice(headers))
         if res.status_code == 200:
                 soup = BS(res.content, 'html.parser')
-                article = soup.find('article', class_ = 'tm-articles-list__item')
+                article = soup.find('div', class_ = 'tm-articles-list')
                 div = article.find_all('div', class_ = 'tm-article-snippet')
                 for i in div:
                     user = i.find('a', class_ = 'tm-user-info__username').text.strip()
